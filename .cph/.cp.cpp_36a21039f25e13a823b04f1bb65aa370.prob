@@ -1,0 +1,1 @@
+{"name":"Local: cp","url":"c:\\Users\\tejai\\OneDrive\\Desktop\\ai\\cp.cpp","tests":[{"id":1769335514888,"input":"3\n5\n1 2 4 8 16\n5\n5 1 7 3 0\n6\n3 3 1 1 7 0\n","output":"4\n1\n0\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\tejai\\OneDrive\\Desktop\\ai\\cp.cpp","group":"local","local":true}
