@@ -124,7 +124,7 @@ int main() {
 
     int explored = 0;
 
-    cout << "\n========== BEST FIRST SEARCH EXECUTION ==========\n";
+    cout << "\n BEST FIRST SEARCH EXECUTION \n";
 
     while (!open.empty()) {
         node curr = open.pop();

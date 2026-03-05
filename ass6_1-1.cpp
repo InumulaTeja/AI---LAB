@@ -19,6 +19,7 @@ public:
         }
         int i = data.size() - 1;
         data.push_back(x);
+
         while (i >= frontIndex && data[i].cost > x.cost) {
             data[i + 1] = data[i];
             i--;
@@ -26,53 +27,52 @@ public:
         data[i + 1] = x;
     }
 
-    void pop() {
-        frontIndex++;
-    }
+    void pop() { frontIndex++; }
 
-    node front() {
-        return data[frontIndex];
-    }
+    node front() { return data[frontIndex]; }
 
-    bool empty() {
-        return frontIndex >= data.size();
-    }
+    bool empty() { return frontIndex >= data.size(); }
 };
 
-void bestFirstSearch(vector<vector<int>> &adjMatrix,vector<string> &cities,int start, int goal) {
-
+void bestFirstSearch(vector<vector<int>> &adjMatrix,vector<string> &cities,vector<int> &heuristic,int start, int goal)
+{
     priorityQueue pq;
     node startNode;
     startNode.path = {start};
-    startNode.cost = 0;
+    startNode.cost = heuristic[start];
     pq.push(startNode);
+
+    set<int> explored;
 
     while (!pq.empty()) {
 
         node curr = pq.front();
         pq.pop();
+
+        int lastCity = curr.path.back();
+        if (explored.count(lastCity)) continue;
+        explored.insert(lastCity);
+
         cout << "Path: ";
         for (int i = 0; i < curr.path.size(); i++) {
             cout << cities[curr.path[i]];
-            if (i != curr.path.size() - 1)
-                cout << " -> ";
+            if (i != curr.path.size() - 1) cout << " -> ";
         }
-        cout << " | Cost = " << curr.cost << endl;
-
-        int lastCity = curr.path.back();
+        cout << " | h(n) = " << curr.cost << endl;
 
         if (lastCity == goal) {
-            cout << "\n Destination reached! \n";
+            cout << "\nDestination reached!\n";
+            cout << "Cities explored: " << explored.size() << endl;
             return;
         }
 
         for (int i = 0; i < adjMatrix.size(); i++) {
             if (adjMatrix[lastCity][i] != INF &&
-                find(curr.path.begin(), curr.path.end(), i) == curr.path.end()) {
+                !explored.count(i)) {
                 node next;
                 next.path = curr.path;
                 next.path.push_back(i);
-                next.cost = curr.cost + adjMatrix[lastCity][i];
+                next.cost = heuristic[i]; 
                 pq.push(next);
             }
         }
@@ -82,7 +82,13 @@ void bestFirstSearch(vector<vector<int>> &adjMatrix,vector<string> &cities,int s
 int main() {
 
     vector<string> cities = {
-        "Chicago","Indianapolis","Cleveland","Detroit","Columbus","Pittsburgh","Baltimore","Philadelphia","Buffalo","New york","Providence","Boston","Portland","Syracuse"
+        "Chicago","Indianapolis","Cleveland","Detroit","Columbus","Pittsburgh",
+        "Baltimore","Philadelphia","Buffalo","New York","Providence","Boston",
+        "Portland","Syracuse"
+    };
+
+    vector<int> heuristic = {
+        860,780,550,610,640,470,360,270,400,215,50,0,107,260
     };
 
     vector<vector<int>> adjMatrix = {
@@ -101,11 +107,8 @@ int main() {
         {INF,INF,INF,INF,INF,INF,INF,INF,INF,INF,INF,107,0,INF},
         {INF,INF,INF,INF,INF,INF,INF,253,150,254,INF,312,INF,0}
     };
+    int start = 0;
+    int goal  = 11; 
 
-    int start = 13;
-    int goal  = 0;
-
-    bestFirstSearch(adjMatrix, cities, start, goal);
-
-    return 0;
+    bestFirstSearch(adjMatrix, cities, heuristic, start, goal);
 }

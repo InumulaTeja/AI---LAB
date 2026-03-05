@@ -49,7 +49,5 @@ int main() {
     else{
         cout << "No Train, Road Clear. Raise Gate, siren Off, Signal Green to level crossing" << endl;
     }
-
-
     return 0;
 }
